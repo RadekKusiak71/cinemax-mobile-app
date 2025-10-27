@@ -39,7 +39,6 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
 
     const registerUser = async (registerData: RegisterData) => {
         try {
-            console.log(registerData.password_confirmation)
             const response = await register(registerData.email, registerData.password, registerData.password_confirmation);
             return response;
         } catch (error) {
