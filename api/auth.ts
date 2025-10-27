@@ -15,6 +15,17 @@ const login = async (email: string, password: string) => {
     });
 };
 
+const verifyAccount = async (verificationCode: string) => {
+    return await apiClient.post('accounts/verify/confirm/', {
+        'verification_code': verificationCode,
+    });
+}
 
-export { login, register };
+const resendVerificationCode = async (email: string) => {
+    return await apiClient.post('accounts/verify/resend/', {
+        'email': email,
+    });
+}
+
+export { login, register, resendVerificationCode, verifyAccount };
 

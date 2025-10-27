@@ -4,17 +4,18 @@ import FormRedirectLink from "@/components/form-redirect-link";
 import { useAuth } from "@/contexts/auth-context";
 import { useErrors } from "@/hooks/useErrors";
 import { useRouter } from "expo-router";
-import React from "react";
+import React, { useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import Toast from "react-native-toast-message";
 
 const LoginScreen: React.FC = () => {
     const router = useRouter();
     const { loginUser } = useAuth();
     const { errors, parseAndSetErrors, clearErrors } = useErrors();
-    const [loading, setLoading] = React.useState(false);
 
-    const [formData, setFormData] = React.useState({
+    const [loading, setLoading] = useState(false);
+    const [formData, setFormData] = useState({
         email: "",
         password: "",
     });
@@ -29,6 +30,13 @@ const LoginScreen: React.FC = () => {
 
         try {
             await loginUser(formData);
+
+            Toast.show({
+                type: 'success',
+                text1: 'Login Successful',
+                text2: 'You have been logged in successfully.'
+            });
+
             router.replace('/(private)/home');
         } catch (err) {
             parseAndSetErrors(err);
@@ -57,7 +65,12 @@ const LoginScreen: React.FC = () => {
                     autoCapitalize="none"
                     errors={errors.password}
                 />
-                <FormRedirectLink body="Don't have an account?" linkText="Sign up" href="/(auth)/register" />
+
+                <View style={styles.form_redirect_link_container}>
+                    <FormRedirectLink body="Don't have an account?" linkText=" Sign up" href="/(auth)/register" />
+                    <FormRedirectLink body="Verify account" linkText=" Click here" href="/(auth)/verify-account" replace={false} />
+                </View>
+
                 <Button title="Login" onPress={handleSubmit} loading={loading} />
             </View>
         </SafeAreaView>
@@ -78,6 +91,10 @@ const styles = StyleSheet.create({
     },
     form_container: {
         gap: 10,
+    },
+    form_redirect_link_container: {
+        marginBlock: 10,
+        gap: 8
     },
 });
 

@@ -7,6 +7,7 @@ import { useRouter } from "expo-router";
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import Toast from "react-native-toast-message";
 
 
 const RegisterScreen: React.FC = () => {
@@ -30,9 +31,15 @@ const RegisterScreen: React.FC = () => {
         clearErrors();
 
         try {
-            console.log(formData)
             await registerUser(formData);
-            router.replace('/login');
+
+            Toast.show({
+                type: 'success',
+                text1: 'Registration Successful',
+                text2: 'Verification code sent to your email.',
+            });
+
+            router.replace('/verify-account');
         } catch (err) {
             parseAndSetErrors(err);
         } finally {
@@ -69,7 +76,9 @@ const RegisterScreen: React.FC = () => {
                     errors={errors.password_confirmation}
                     secureTextEntry
                 />
-                <FormRedirectLink body="You already have an account?" linkText="Sign in" href="/(auth)/login" />
+
+                <FormRedirectLink body="You already have an account?" linkText=" Sign in" href="/(auth)/login" />
+
                 <Button title="Register" onPress={handleSubmit} loading={loading} />
             </View>
 
@@ -89,7 +98,7 @@ const styles = StyleSheet.create({
         marginBottom: 24,
     },
     form_container: {
-        gap: 10,
+        gap: 15,
     },
 });
 
