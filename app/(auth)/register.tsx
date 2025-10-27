@@ -39,7 +39,7 @@ const RegisterScreen: React.FC = () => {
                 text2: 'Verification code sent to your email.',
             });
 
-            router.replace('/verify-account');
+            router.replace('/(auth)/(account-verification)/verify');
         } catch (err) {
             parseAndSetErrors(err);
         } finally {

@@ -65,7 +65,7 @@ const VerifyAccountPage: React.FC = () => {
                     <FormRedirectLink
                         body="Didn't receive a code? "
                         linkText="Resend."
-                        href="/(auth)/resend-account-verification-code"
+                        href="/(auth)/(account-verification)/resend"
                         replace={false}
                     />
                 </View>

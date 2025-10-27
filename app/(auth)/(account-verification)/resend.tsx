@@ -33,7 +33,7 @@ const ResendAccountVerificationCode = () => {
                 text2: 'Please check your email for the new code.',
             });
 
-            router.replace('/(auth)/verify-account');
+            router.replace('/(auth)/(account-verification)/verify');
 
         } catch (err) {
             parseAndSetErrors(err);

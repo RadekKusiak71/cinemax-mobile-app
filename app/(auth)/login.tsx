@@ -68,7 +68,7 @@ const LoginScreen: React.FC = () => {
 
                 <View style={styles.form_redirect_link_container}>
                     <FormRedirectLink body="Don't have an account?" linkText=" Sign up" href="/(auth)/register" />
-                    <FormRedirectLink body="Verify account" linkText=" Click here" href="/(auth)/verify-account" replace={false} />
+                    <FormRedirectLink body="Verify account" linkText=" Click here" href="/(auth)/(account-verification)/verify" replace={false} />
                 </View>
 
                 <Button title="Login" onPress={handleSubmit} loading={loading} />
