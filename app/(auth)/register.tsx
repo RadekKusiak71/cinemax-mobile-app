@@ -77,9 +77,15 @@ const RegisterScreen: React.FC = () => {
                     secureTextEntry
                 />
 
-                <FormRedirectLink body="You already have an account?" linkText=" Sign in" href="/(auth)/login" />
-
                 <Button title="Register" onPress={handleSubmit} loading={loading} />
+
+                <View style={styles.bottom_links_container}>
+                    <FormRedirectLink
+                        body="You already have an account?"
+                        linkText=" Sign in"
+                        href="/(auth)/login"
+                    />
+                </View>
             </View>
 
         </SafeAreaView>
@@ -99,6 +105,10 @@ const styles = StyleSheet.create({
     },
     form_container: {
         gap: 15,
+    },
+    bottom_links_container: {
+        alignItems: 'center',
+        gap: 12,
     },
 });
 

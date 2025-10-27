@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         padding: 20,
-        gap: 10,
+        gap: 15,
     },
     title: {
         fontSize: 24,
@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
     },
     resendContainer: {
         alignItems: 'center',
-        marginTop: 20,
+        marginTop: 10,
     },
 });
 

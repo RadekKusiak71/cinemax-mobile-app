@@ -27,5 +27,19 @@ const resendVerificationCode = async (email: string) => {
     });
 }
 
-export { login, register, resendVerificationCode, verifyAccount };
+const requestPasswordReset = async (email: string) => {
+    return await apiClient.post('accounts/password-reset/request/', {
+        'email': email,
+    });
+};
+
+const confirmPasswordReset = async (resetCode: string, newPassword: string, newPasswordConfirmation: string) => {
+    return await apiClient.post('accounts/password-reset/confirm/', {
+        'verification_code': resetCode,
+        'new_password': newPassword,
+        'new_password_confirmation': newPasswordConfirmation,
+    })
+};
+
+export { confirmPasswordReset, login, register, requestPasswordReset, resendVerificationCode, verifyAccount };
 

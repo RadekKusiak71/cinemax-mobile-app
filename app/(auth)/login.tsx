@@ -48,6 +48,8 @@ const LoginScreen: React.FC = () => {
     return (
         <SafeAreaView style={styles.container}>
             <Text style={styles.form_header}>Welcome back!</Text>
+
+            {/* Form container holds inputs, forgot password, and login button */}
             <View style={styles.form_container}>
                 <FormInput
                     placeholder="Email"
@@ -66,12 +68,30 @@ const LoginScreen: React.FC = () => {
                     errors={errors.password}
                 />
 
-                <View style={styles.form_redirect_link_container}>
-                    <FormRedirectLink body="Don't have an account?" linkText=" Sign up" href="/(auth)/register" />
-                    <FormRedirectLink body="Verify account" linkText=" Click here" href="/(auth)/(account-verification)/verify" replace={false} />
+                <View style={styles.forgot_password_container}>
+                    <FormRedirectLink
+                        body=""
+                        linkText="Forgot password?"
+                        href="/(auth)/(password-reset)/request"
+                        replace={false}
+                    />
                 </View>
 
                 <Button title="Login" onPress={handleSubmit} loading={loading} />
+            </View>
+
+            <View style={styles.bottom_links_container}>
+                <FormRedirectLink
+                    body="Don't have an account?"
+                    linkText=" Sign up"
+                    href="/(auth)/register"
+                />
+                <FormRedirectLink
+                    body="Need to verify?"
+                    linkText=" Resend email"
+                    href="/(auth)/(account-verification)/verify"
+                    replace={false}
+                />
             </View>
         </SafeAreaView>
     );
@@ -92,9 +112,15 @@ const styles = StyleSheet.create({
     form_container: {
         gap: 10,
     },
-    form_redirect_link_container: {
-        marginBlock: 10,
-        gap: 8
+
+    forgot_password_container: {
+        alignItems: 'flex-end',
+        marginBottom: 8,
+    },
+    bottom_links_container: {
+        marginTop: 24,
+        alignItems: 'center',
+        gap: 12,
     },
 });
 
