@@ -8,12 +8,22 @@ const register = async (email: string, password: string, password_confirmation: 
     });
 };
 
+const whoami = async () => {
+    return await apiClient.get('accounts/whoami/');
+}
+
 const login = async (email: string, password: string) => {
     return await apiClient.post('token/', {
         'email': email,
         'password': password
     });
 };
+
+const refreshToken = async (refresh: string) => {
+    return await apiClient.post('token/refresh/', {
+        'refresh': refresh
+    });
+}
 
 const verifyAccount = async (verificationCode: string) => {
     return await apiClient.post('accounts/verify/confirm/', {
@@ -41,5 +51,5 @@ const confirmPasswordReset = async (resetCode: string, newPassword: string, newP
     })
 };
 
-export { confirmPasswordReset, login, register, requestPasswordReset, resendVerificationCode, verifyAccount };
+export { confirmPasswordReset, login, refreshToken, register, requestPasswordReset, resendVerificationCode, verifyAccount, whoami };
 

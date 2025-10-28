@@ -1,7 +1,9 @@
 import axios from 'axios';
-import { useRouter } from 'expo-router';
+import * as SecureStore from 'expo-secure-store';
 import Toast from 'react-native-toast-message';
 
+const ACCESS_TOKEN_KEY = 'accessToken';
+const REFRESH_TOKEN_KEY = 'refreshToken';
 const baseURL = process.env.EXPO_PUBLIC_API_URL;
 
 if (!baseURL) {
@@ -24,23 +26,71 @@ const handleDetailedError = (detail: any) => {
     return 'An error occurred';
 }
 
+export const setApiAuthHeader = (token: string | null) => {
+    if (token) {
+        apiClient.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    } else {
+        delete apiClient.defaults.headers.common['Authorization'];
+    }
+};
+
 apiClient.interceptors.response.use(
 
     (response) => response,
 
-    (error) => {
+    async (error) => {
+        const originalRequest = error.config;
 
         if (error.response) {
             const status = error.response.status;
 
-            if (status === 401) {
-                Toast.show({
-                    type: 'error',
-                    text1: handleDetailedError(error.response.data.detail),
-                    text2: 'Please log in again.'
-                });
+            if (status === 401 && !originalRequest._retry) {
 
-                useRouter().navigate('/login');
+                if (originalRequest.url.endsWith('/api/token/') || originalRequest.url.endsWith('/api/token/refresh/')) {
+                    Toast.show({
+                        type: 'error',
+                        text1: 'Authentication Failed',
+                        text2: handleDetailedError(error.response.data.detail || 'Invalid credentials'),
+                    });
+                    return Promise.reject(error);
+                }
+
+                originalRequest._retry = true;
+
+                try {
+                    const refreshToken = await SecureStore.getItemAsync(REFRESH_TOKEN_KEY);
+
+                    if (!refreshToken) {
+                        throw new Error("No refresh token available");
+                    }
+
+                    const { data } = await axios.post(`${baseURL}token/refresh/`, {
+                        refresh: refreshToken,
+                    });
+
+                    const { access: newAccessToken, refresh: newRefreshToken } = data;
+
+                    await SecureStore.setItemAsync(ACCESS_TOKEN_KEY, newAccessToken);
+                    await SecureStore.setItemAsync(REFRESH_TOKEN_KEY, newRefreshToken);
+
+                    setApiAuthHeader(newAccessToken);
+                    originalRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
+
+                    return apiClient(originalRequest);
+
+                } catch (refreshError: any) {
+
+                    await SecureStore.deleteItemAsync(ACCESS_TOKEN_KEY);
+                    await SecureStore.deleteItemAsync(REFRESH_TOKEN_KEY);
+
+                    Toast.show({
+                        type: 'error',
+                        text1: 'Session Expired',
+                        text2: 'Please log in again.'
+                    });
+
+                    return Promise.reject(refreshError);
+                }
 
             } else if (status == 403) {
                 Toast.show({
