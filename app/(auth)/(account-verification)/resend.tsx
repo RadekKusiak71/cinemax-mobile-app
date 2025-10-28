@@ -1,15 +1,18 @@
-import { useRouter } from 'expo-router';
-import React, { useState } from 'react';
-import {
-    StyleSheet,
-    Text,
-    View,
-} from 'react-native';
-
 import { resendVerificationCode } from '@/api/auth';
 import Button from '@/components/button';
 import FormInput from '@/components/form-input';
+import { theme } from '@/constants/theme';
 import { useErrors } from '@/hooks/useErrors';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
+import React, { useState } from 'react';
+import {
+    KeyboardAvoidingView,
+    Platform,
+    StyleSheet,
+    Text,
+    View
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Toast from 'react-native-toast-message';
 
@@ -26,15 +29,12 @@ const ResendAccountVerificationCode = () => {
 
         try {
             await resendVerificationCode(email);
-
             Toast.show({
                 type: 'success',
                 text1: 'Verification code resent',
                 text2: 'Please check your email for the new code.',
             });
-
             router.replace('/(auth)/(account-verification)/verify');
-
         } catch (err) {
             parseAndSetErrors(err);
         } finally {
@@ -44,48 +44,74 @@ const ResendAccountVerificationCode = () => {
 
     return (
         <SafeAreaView style={styles.container}>
-            <View style={styles.content}>
-                <Text style={styles.title}>Resend Verification Code</Text>
-                <Text style={styles.label}>Enter email to send verification code:</Text>
+            <KeyboardAvoidingView
+                behavior={Platform.OS === "ios" ? "padding" : "height"}
+                style={styles.keyboardAvoidingContainer}
+            >
+                <View style={styles.content}>
 
-                <FormInput
-                    value={email}
-                    onChangeText={(text) => {
-                        setEmail(text);
-                    }}
-                    placeholder="Please enter your email"
-                    keyboardType="email-address"
-                    textAlign="center"
-                    errors={errors.verification_code}
-                />
+                    <MaterialCommunityIcons
+                        name="email-check-outline"
+                        size={64}
+                        color={theme.colors.textAccent}
+                        style={styles.icon}
+                    />
 
-                <Button title="Verify" onPress={handleSubmit} loading={loading} />
+                    <Text style={styles.title}>Resend Verification Code</Text>
 
-            </View>
+                    <Text style={styles.description}>
+                        Enter the email address you used to register and we'll send you a new code.
+                    </Text>
+
+                    <FormInput
+                        value={email}
+                        onChangeText={(text) => {
+                            setEmail(text);
+                        }}
+                        placeholder="Please enter your email"
+                        keyboardType="email-address"
+                        errors={errors.email}
+                    />
+
+                    <Button title="Send Email" onPress={handleSubmit} loading={loading} />
+
+                </View>
+            </KeyboardAvoidingView>
         </SafeAreaView>
     )
 }
+
 const styles = StyleSheet.create({
     container: {
+        flex: 1,
+        backgroundColor: theme.colors.background,
+    },
+    keyboardAvoidingContainer: {
         flex: 1,
     },
     content: {
         flex: 1,
         justifyContent: 'center',
-        padding: 20,
-        gap: 14,
+        padding: theme.spacing.m,
+        gap: theme.spacing.m,
+    },
+    icon: {
+        textAlign: 'center',
+        marginBottom: theme.spacing.s,
     },
     title: {
-        fontSize: 24,
+        fontSize: theme.fontSizes.xl,
         fontWeight: 'bold',
         textAlign: 'center',
-        marginBottom: 20,
+        marginBottom: theme.spacing.s,
+        color: theme.colors.text,
     },
-    label: {
-        fontSize: 16,
-        marginBottom: 8,
-        color: '#333',
+    description: {
+        fontSize: theme.fontSizes.body,
+        textAlign: 'center',
+        color: theme.colors.textSecondary,
+        marginBottom: theme.spacing.l,
     },
 });
 
-export default ResendAccountVerificationCode
+export default ResendAccountVerificationCode;

@@ -1,6 +1,6 @@
+import { theme } from '@/constants/theme';
 import React from "react";
 import { ActivityIndicator, Pressable, StyleSheet, Text } from "react-native";
-
 
 interface ButtonProps {
     title: string;
@@ -12,7 +12,7 @@ const Button: React.FC<ButtonProps> = ({ title, loading, onPress }) => {
     return (
         <Pressable style={styles.button} onPress={onPress}>
             {loading ?
-                <ActivityIndicator color="#ffffff" />
+                <ActivityIndicator color={theme.colors.textDark} />
                 :
                 <Text style={styles.buttonText}>{title}</Text>
             }
@@ -22,17 +22,17 @@ const Button: React.FC<ButtonProps> = ({ title, loading, onPress }) => {
 
 const styles = StyleSheet.create({
     button: {
-        height: 48,
-        backgroundColor: "#3b82f6",
-        borderRadius: 8,
+        height: theme.controlHeight.m,
+        backgroundColor: theme.colors.primary,
+        borderRadius: theme.radii.m,
         justifyContent: "center",
         alignItems: "center",
     },
     buttonText: {
-        color: "#ffffff",
+        color: theme.colors.textDark,
         fontWeight: "bold",
+        fontSize: theme.fontSizes.body,
     },
 });
-
 
 export default Button;

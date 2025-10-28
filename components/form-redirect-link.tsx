@@ -1,7 +1,7 @@
+import { theme } from '@/constants/theme';
 import { Href, Link } from "expo-router";
 import React from "react";
 import { StyleSheet, Text } from "react-native";
-
 
 type FormRedirectLinkProps = {
     body: string;
@@ -28,10 +28,11 @@ const FormRedirectLink: React.FC<FormRedirectLinkProps> = ({ body, linkText, hre
 
 const styles = StyleSheet.create({
     redirect_link: {
-        color: "#666",
+        color: theme.colors.textSecondary,
+        fontSize: theme.fontSizes.body,
     },
     redirect_link_text: {
-        color: "#3b82f6",
+        color: theme.colors.textAccent,
         fontWeight: "bold",
     },
 });

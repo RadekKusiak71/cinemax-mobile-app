@@ -1,21 +1,29 @@
 import LinkButton from "@/components/link-button";
+import { theme } from '@/constants/theme';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 const Index: React.FC = () => {
   return (
-    <SafeAreaView style={styles.container}>
-
-      <View style={styles.welcomeTextContainer}>
-        <Text style={styles.welcomeHeader}>Cinemax</Text>
-        <Text style={styles.welcomeText}>Find your favorite movies and book tickets.</Text>
+    <SafeAreaView style={styles.container} edges={['bottom']}>
+      <View style={styles.contentContainer}>
+        <MaterialCommunityIcons
+          name="popcorn"
+          size={100}
+          color={theme.colors.textAccent}
+        />
+        <View style={styles.welcomeTextContainer}>
+          <Text style={styles.welcomeHeader}>Cinemax</Text>
+          <Text style={styles.welcomeSubText}>
+            Discover movies and book your seats
+          </Text>
+        </View>
       </View>
-
       <View style={styles.linksContainer}>
-        <LinkButton href="/(auth)/login" title="Sign In" />
-        <LinkButton href="/(auth)/register" title="Sign Up" />
+        <LinkButton version="primary" href="/(auth)/register" title="Sign Up" />
+        <LinkButton version="secondary" href="/(auth)/login" title="Sign In" />
       </View>
-
     </SafeAreaView>
   );
 };
@@ -23,27 +31,34 @@ const Index: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "space-between",
-    padding: 20,
+    backgroundColor: theme.colors.background,
+    padding: theme.spacing.m,
   },
-  welcomeTextContainer: {
+  contentContainer: {
+    flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    gap: 8,
-    paddingInline: 12,
+    gap: theme.spacing.l,
+  },
+  welcomeTextContainer: {
+    alignItems: "center",
+    gap: theme.spacing.s,
   },
   welcomeHeader: {
-    fontSize: 50,
+    color: theme.colors.text,
+    fontSize: theme.fontSizes.header,
     textAlign: "center",
     fontWeight: "bold",
   },
-  welcomeText: {
-    fontSize: 16,
+  welcomeSubText: {
+    fontSize: theme.fontSizes.subHeader,
     textAlign: "center",
-    color: "#666",
+    color: theme.colors.textAccent,
   },
   linksContainer: {
-    gap: 12,
+    gap: theme.spacing.m,
+    width: "100%",
+    flexDirection: "column",
   },
 });
 
